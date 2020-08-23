@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>MoneyTracker App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+</head>
+
+<div style="background-color: #F3F4F4">
+    <h1>
+        MoneyTracker APP
+    </h1>
+
+
+    <div style="padding-top:15px; padding-bottom: 15px; margin-bottom:50px; background-color:#F5F7F8; border-style: solid; border-color:gold">
+            <h2>CURRENT SAVINGS: ${{ totals.TotalToSave }}</h2> 
+            <h2>CURRENT AMOUNT: ${{ totals.AmountToSpend}}</h2>
+                <h4 style="text-align:center">Current Amount (Excluding Savings): ${{ totals.CurrentAmount}}</h4>
+    </div>
+
+
+    <div>
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class=flashes>
+                {% for message in messages %}
+                    <h2 style="color:red">{{ message }}</h2>
+                {% endfor %}
+                </div>
+             {% endif %}
+             {% endwith %}
+    </div>
+
+    <div style="padding-bottom:25px; background-color:#F5F7F8">
+        <form action="{{ url_for('main_transactions') }}" method="post">
+            <h4>Amount Spent - Details</h4>
+
+            <p> Type:
+                <input type="radio" id="gf" name="type" value="GF">
+                <label for="gf">GF</label>
+                <input type="radio" id="food" name="type" value="Food">
+                <label for="food">Food</label>
+                <input type="radio" id="bills" name="type" value="Bills">
+                <label for="bills">Bills</label>
+                <input type="radio" id="gas" name="type" value="Gas">
+                <label for="gas">Gas</label>
+                <input type="radio" id="clothing" name="type" value="Clothing">
+                <label for="clothin">Clothing</label>
+                <input type="radio" id="other" name="type" value="Other">
+                <label for="other">Other</label>
+            </p>
+
+            <p>
+                <label style="margin-top:50px" for="quantity">Amount:  $ </label>
+                <input type="number" id="quantity" step="0.01" name="transaction" min="0" max="5000">
+            </p>
+
+            <br>
+
+            <input style = "background-color: #00008b; padding: 15px 25px; margin: 4px 2px; border:black; color:white; text-align:center; font-size: 16px"type="submit" value="Submit">
+
+        </form>
+    </div>
+
+
+
+    <div style="background-color:#F5F7F8; padding-bottom: 50px">
+            <h4 style = "border-bottom-style: solid; ">Transactions</h4>
+            
+            <h3 style="color: red">Total Amount Spent: ${{totals.TotalTransactions}}</h3>
+
+            <table width="500px">
+                <div id = "Bio">
+                    <tr>
+                        <th style = "font-size: 30px;">Type</th>
+                        <th style = "font-size: 30px;">Amount</th>
+                        <th style = "font-size: 30px;">Date</th>
+                    </tr>
+                    {% block content %}
+                        {% for transaction in transactions%}
+                        <tr>
+                                <td style = "padding: 20px" style = "font-size: 25px;">{{transaction.Type}}</td>
+                                <td style = "padding: 20px" style = "font-size: 25px;">${{transaction.Amount}}</td>
+                                <td style = "padding: 20px" style = "font-size: 25px;">{{transaction.Date}}</td>
+                        </tr>
+                        {% endfor %}
+                    {% endblock content %}
+                    
+                    </div>
+                
+            </table> 
+    </div>
+
+
+    <form action="{{ url_for('main_transactions') }}" method="post">
+        <input type="submit" name="goFinances" value="Switch to Finances">
+    </form>
+
+
+    </div>
+</html>
